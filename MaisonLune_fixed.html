@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON LUNE — Moda Contemporánea</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf9f7;--surface:#fff;--s2:#f5f2ee;--border:#e5e0da;--border2:#cfc9c0;--ink:#1a1614;--accent:#2a2118;--gold:#8b7355;--blush:#e8d5c4;--muted:#9b948a;--muted2:#c4bdb6;--danger:#c0392b;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'Jost',sans-serif;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--gold);}
+img{display:block;width:100%;height:100%;object-fit:cover;}
+.page{display:none;min-height:100vh;padding-top:64px;}.page.active{display:block;}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#fff;padding:13px 26px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;z-index:2000;opacity:0;pointer-events:none;transition:all .35s;white-space:nowrap;display:flex;align-items:center;gap:10px;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}#toast .ti{color:var(--blush);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,247,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
+.nav-links{display:flex;gap:2px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;padding:8px 14px;border:1px solid transparent;transition:all .2s;cursor:pointer;}
+.nav-links a:hover{color:var(--ink);}
+.nav-links a.active{color:var(--accent);border-color:var(--border);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.search-toggle{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:5px;line-height:1;transition:color .2s;}
+.search-toggle:hover{color:var(--ink);}
+.cart-btn{position:relative;background:none;border:1px solid var(--border2);color:var(--ink);padding:9px 22px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .25s;font-weight:500;}
+.cart-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.cart-count{position:absolute;top:-7px;right:-7px;background:var(--gold);color:#fff;width:18px;height:18px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:600;transition:transform .3s;}
+.cart-count.bump{transform:scale(1.5);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px;}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--ink);transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;z-index:99;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:color .2s;font-weight:500;}
+.mobile-menu a:last-child{border-bottom:none;}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);}
+.search-bar{position:fixed;top:64px;left:0;right:0;z-index:98;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 48px;transform:translateY(-100%);transition:transform .3s;display:flex;gap:12px;}
+.search-bar.open{transform:translateY(0);}
+.search-input{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--ink);padding:11px 18px;font-family:'Jost',sans-serif;font-size:13px;outline:none;transition:border-color .25s;}
+.search-input:focus{border-color:var(--gold);}
+.search-input::placeholder{color:var(--muted2);}
+.search-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;}
+.hero{min-height:calc(100vh - 64px);display:grid;grid-template-columns:1fr 1fr;}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:80px 64px 80px 72px;}
+.hero-tag{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:16px;}
+.hero-tag::after{content:'';flex:0 0 48px;height:1px;background:var(--blush);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,6vw,76px);font-weight:300;line-height:1.05;letter-spacing:-.01em;margin-bottom:22px;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:13px;line-height:1.9;color:var(--muted);max-width:360px;margin-bottom:44px;font-weight:300;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
+.btn-dark{background:var(--accent);color:#fff;padding:14px 36px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;transition:all .25s;font-weight:500;}
+.btn-dark:hover{background:var(--gold);}
+.btn-line{background:transparent;color:var(--ink);padding:14px 36px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--border2);cursor:pointer;transition:all .25s;font-weight:500;}
+.btn-line:hover{border-color:var(--accent);color:var(--accent);}
+.hero-metrics{display:flex;gap:40px;flex-wrap:wrap;}
+.metric{border-left:2px solid var(--blush);padding-left:18px;}
+.metric-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;line-height:1;}
+.metric-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.hero-right{position:relative;overflow:hidden;background:var(--s2);}
+.hero-img{width:100%;height:100%;object-fit:cover;transition:transform 9s ease;}
+.hero-right:hover .hero-img{transform:scale(1.04);}
+.hero-badge{position:absolute;bottom:36px;left:36px;background:#fff;padding:14px 20px;border-left:3px solid var(--gold);}
+.badge-top{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.badge-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;}
+.marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:14px 0;background:var(--surface);}
+.marquee-inner{display:flex;gap:72px;animation:marquee 28s linear infinite;white-space:nowrap;align-items:center;}
+.marquee-item{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--muted);display:flex;align-items:center;gap:24px;}
+.marquee-item::after{content:'◇';font-style:normal;font-size:9px;color:var(--blush);}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.catalog-section{padding:80px 48px 60px;}
+.section-header{text-align:center;margin-bottom:48px;}
+.section-tag{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,52px);font-weight:300;letter-spacing:-.01em;}
+.section-sub{font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:.05em;}
+.tab-bar{display:flex;justify-content:center;margin-bottom:48px;}
+.tab-bar-inner{display:inline-flex;border:1px solid var(--border);}
+.tab-btn{background:none;border:none;border-right:1px solid var(--border);color:var(--muted);padding:11px 28px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.14em;cursor:pointer;transition:all .2s;text-transform:uppercase;font-weight:500;}
+.tab-btn:last-child{border-right:none;}
+.tab-btn.active,.tab-btn:hover{background:var(--accent);color:#fff;}
+.search-results-label{text-align:center;font-size:12px;color:var(--muted);margin-bottom:32px;}
+.search-results-label span{color:var(--gold);}
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.product-card{cursor:default;}
+.product-img-wrap{aspect-ratio:2/3;overflow:hidden;position:relative;background:var(--s2);margin-bottom:14px;}
+.product-img-wrap img{transition:transform .7s ease;}
+.product-card:hover .product-img-wrap img{transform:scale(1.04);}
+.prod-tag{position:absolute;top:14px;left:14px;background:#fff;color:var(--accent);font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:5px 10px;font-weight:600;z-index:2;}
+.prod-wish{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.85);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .2s;backdrop-filter:blur(4px);}
+.prod-wish:hover{color:var(--accent);background:#fff;}
+.prod-overlay{position:absolute;bottom:0;left:0;right:0;background:rgba(42,33,24,.85);padding:14px;transform:translateY(100%);transition:transform .3s ease;z-index:3;display:flex;gap:8px;}
+.product-card:hover .prod-overlay{transform:translateY(0);}
+.ov-view{flex:1;background:#fff;color:var(--ink);border:none;padding:10px;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;font-weight:500;}
+.ov-view:hover{background:var(--bg);}
+.ov-bag{background:var(--gold);color:#fff;border:none;padding:10px 16px;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;font-weight:500;}
+.ov-bag:hover{background:var(--accent);}
+.prod-info{padding:0 2px;}
+.prod-cat{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.prod-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;margin-bottom:10px;letter-spacing:.01em;}
+.prod-footer{display:flex;align-items:center;gap:10px;}
+.prod-price{font-size:14px;font-weight:500;}
+.prod-price-old{font-size:11px;color:var(--muted2);text-decoration:line-through;}
+.empty-state{grid-column:1/-1;text-align:center;padding:80px 24px;}
+.empty-sym{font-family:'Cormorant Garamond',serif;font-size:48px;font-style:italic;color:var(--muted2);margin-bottom:12px;}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;margin-bottom:8px;}
+.empty-sub{font-size:12px;color:var(--muted);}
+.page-hero{padding:80px 48px 44px;background:var(--surface);border-bottom:1px solid var(--border);}
+.page-hero-tag{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,62px);font-weight:300;letter-spacing:-.01em;margin-bottom:14px;}
+.page-hero h1 em{font-style:italic;color:var(--gold);}
+.page-hero p{font-size:13px;color:var(--muted);max-width:520px;line-height:1.9;font-weight:300;}
+.lookbook-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 48px 48px;}
+.lbook-item{position:relative;overflow:hidden;cursor:pointer;}
+.lbook-item img{width:100%;aspect-ratio:2/3;object-fit:cover;transition:transform .7s;}
+.lbook-item:hover img{transform:scale(1.05);}
+.lbook-caption{position:absolute;bottom:0;left:0;right:0;padding:40px 20px 22px;background:linear-gradient(transparent,rgba(26,22,20,.75));}
+.lbook-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:#fff;margin-bottom:4px;}
+.lbook-price{font-size:11px;color:rgba(255,255,255,.65);letter-spacing:.06em;}
+.lbook-tag{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.9);font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:5px 10px;color:var(--accent);font-weight:600;}
+.acc-featured{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:0 48px 24px;}
+.acc-feat-item{position:relative;overflow:hidden;cursor:pointer;}
+.acc-feat-item img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .6s;}
+.acc-feat-item:hover img{transform:scale(1.04);}
+.acc-feat-label{position:absolute;bottom:20px;left:20px;background:rgba(255,255,255,.92);padding:12px 18px;backdrop-filter:blur(4px);}
+.acc-feat-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;margin-bottom:2px;}
+.acc-feat-sub{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.editorial{padding:56px 48px;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:40px;align-items:center;}
+.ed-div{background:var(--border);height:60px;align-self:center;}
+.ed-item{text-align:center;}
+.ed-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;line-height:1;}
+.ed-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px;}
+.ed-desc{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.8;max-width:180px;margin-left:auto;margin-right:auto;}
+/* ══ MODAL — simplified: no colors, no sizes, no thumbnails ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,22,20,.78);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);max-width:780px;width:100%;max-height:92vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;position:relative;transform:scale(.97);transition:transform .3s;}
+.modal-overlay.open .modal{transform:scale(1);}
+.modal-close{position:absolute;top:14px;right:14px;background:#fff;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s;line-height:1;}
+.modal-close:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.modal-imgs{background:var(--s2);}
+.modal-main-img{overflow:hidden;}
+.modal-main-img img{width:100%;aspect-ratio:2/3;object-fit:cover;}
+.modal-details{padding:36px;display:flex;flex-direction:column;}
+.m-tag{display:inline-block;background:var(--blush);color:var(--accent);font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:5px 10px;font-weight:600;margin-bottom:12px;}
+.m-cat{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.m-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:8px;}
+.m-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
+.m-price{font-size:22px;font-weight:500;}
+.m-price-old{font-size:13px;color:var(--muted2);text-decoration:line-through;}
+.m-rating{font-size:11px;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.m-stars{color:var(--gold);letter-spacing:2px;font-size:12px;}
+.m-desc{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:22px;font-weight:300;flex:1;}
+.m-divider{height:1px;background:var(--border);margin-bottom:20px;}
+.m-qty{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.qty-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.qty-wrap{display:flex;align-items:center;border:1px solid var(--border);}
+.qty-btn{background:none;border:none;color:var(--ink);width:36px;height:36px;font-size:16px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+.qty-btn:hover{background:var(--s2);}
+.qty-num{width:38px;text-align:center;font-size:13px;border-left:1px solid var(--border);border-right:1px solid var(--border);height:36px;display:flex;align-items:center;justify-content:center;}
+.m-add-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:15px;font-family:'Jost',sans-serif;font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;margin-bottom:9px;}
+.m-add-btn:hover{background:var(--gold);}
+.m-wish-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);padding:12px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.m-wish-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* CART */
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;width:440px;background:var(--surface);z-index:200;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid var(--border);}
+.cart-drawer.open{transform:translateX(0);}
+.cart-header{padding:22px 30px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cart-title{font-family:'Cormorant Garamond',serif;font-size:22px;}
+.cart-title span{font-family:'Jost',sans-serif;font-size:10px;color:var(--muted);margin-left:8px;font-weight:400;letter-spacing:.08em;}
+.close-drawer{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;}
+.close-drawer:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.cart-items{flex:1;overflow-y:auto;padding:18px 30px;display:flex;flex-direction:column;gap:16px;}
+.cart-empty{text-align:center;padding:70px 20px;}
+.cart-empty-sym{font-family:'Cormorant Garamond',serif;font-size:46px;font-style:italic;color:var(--muted2);display:block;margin-bottom:12px;}
+.cart-empty p{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--muted);}
+.cart-item{display:grid;grid-template-columns:72px 1fr;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);position:relative;}
+.cart-item:last-child{border-bottom:none;}
+.ci-img{width:72px;height:90px;overflow:hidden;background:var(--s2);}
+.ci-cat{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.ci-name{font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:9px;}
+.ci-row{display:flex;align-items:center;justify-content:space-between;}
+.ci-price{font-size:14px;font-weight:500;}
+.ci-qty{display:flex;align-items:center;border:1px solid var(--border);}
+.ciq-btn{background:none;border:none;color:var(--ink);width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.ciq-btn:hover{background:var(--s2);}
+.ciq-num{width:28px;text-align:center;font-size:12px;border-left:1px solid var(--border);border-right:1px solid var(--border);height:26px;display:flex;align-items:center;justify-content:center;}
+.ci-remove{position:absolute;top:0;right:0;background:none;border:none;color:var(--muted2);font-size:15px;cursor:pointer;line-height:1;transition:color .2s;}
+.ci-remove:hover{color:var(--danger);}
+.cart-footer{padding:18px 30px;border-top:1px solid var(--border);}
+.cart-rows{margin-bottom:14px;}
+.cart-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px;}
+.cart-row.total{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);border-top:1px solid var(--border);padding-top:10px;margin-top:4px;margin-bottom:0;}
+.checkout-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:14px;font-family:'Jost',sans-serif;font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;}
+.checkout-btn:hover{background:var(--gold);}
+.checkout-btn:disabled{opacity:.35;cursor:not-allowed;background:var(--muted2);}
+/* CHECKOUT */
+.checkout-overlay{position:fixed;inset:0;background:rgba(26,22,20,.88);z-index:600;display:flex;align-items:flex-start;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;overflow-y:auto;}
+.checkout-overlay.open{opacity:1;pointer-events:all;}
+.checkout-modal{background:var(--bg);width:100%;max-width:680px;position:relative;transform:translateY(15px);transition:transform .3s;margin:auto;}
+.checkout-overlay.open .checkout-modal{transform:translateY(0);}
+.co-head{padding:36px 52px 28px;border-bottom:1px solid var(--border);background:var(--surface);}
+.co-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:4px;}
+.co-sub{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.co-body{padding:32px 52px;}
+.form-section{margin-bottom:26px;}
+.form-section-title{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.form-section-title::before{content:attr(data-n);font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--muted2);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.form-grid.full{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.form-input{background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:11px 14px;font-family:'Jost',sans-serif;font-size:12px;outline:none;transition:border-color .25s;}
+.form-input:focus{border-color:var(--gold);}
+.form-input::placeholder{color:var(--muted2);}
+.form-input.error{border-color:var(--danger);}
+.order-summary{background:var(--surface);padding:20px;margin-bottom:22px;border:1px solid var(--border);}
+.os-title{font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:12px;}
+.order-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px;}
+.order-row.total{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--ink);border-top:1px solid var(--border);padding-top:10px;margin-top:4px;margin-bottom:0;}
+.place-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:16px;font-family:'Jost',sans-serif;font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .25s;}
+.place-btn:hover{background:var(--gold);}
+.success-screen{display:none;flex-direction:column;align-items:center;text-align:center;padding:70px 36px;}
+.success-screen.show{display:flex;}
+.success-sym{font-family:'Cormorant Garamond',serif;font-size:64px;font-style:italic;color:var(--gold);animation:pop .4s ease;}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;margin-bottom:14px;margin-top:8px;}
+.success-sub{font-size:13px;color:var(--muted);max-width:360px;line-height:1.9;font-weight:300;}
+footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);flex-wrap:wrap;gap:12px;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;}
+.footer-copy{font-size:10px;color:var(--muted);}
+.drawer-backdrop{position:fixed;inset:0;background:rgba(26,22,20,.4);z-index:199;opacity:0;pointer-events:none;transition:opacity .3s;}
+.drawer-backdrop.show{opacity:1;pointer-events:all;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.hero-left>*{animation:fadeUp .8s ease forwards;opacity:0;}
+.hero-tag{animation-delay:.1s}.hero-title{animation-delay:.25s}.hero-sub{animation-delay:.4s}.hero-ctas{animation-delay:.55s}.hero-metrics{animation-delay:.7s}
+@media(max-width:960px){
+  .nav-inner{padding:0 20px;}.nav-links{display:none;}.hamburger{display:flex;}
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-right{height:420px;}.hero-left{padding:56px 28px 48px;}
+  .catalog-section,.page-hero{padding-left:24px;padding-right:24px;}
+  .lookbook-strip,.acc-featured{padding-left:24px;padding-right:24px;}
+  .editorial{grid-template-columns:1fr;gap:0;padding:40px 24px;}
+  .ed-div{display:none;}.ed-item{padding:24px 0;border-bottom:1px solid var(--border);}
+  .ed-item:last-child{border-bottom:none;}
+  footer{padding:24px;}.search-bar{padding:12px 20px;}
+}
+@media(max-width:640px){
+  .hero-left{padding:44px 18px 36px;}.hero-right{height:320px;}
+  .products-grid{grid-template-columns:1fr 1fr;gap:16px;}
+  .lookbook-strip{grid-template-columns:1fr 1fr;}
+  .acc-featured{grid-template-columns:1fr;}
+  .modal{grid-template-columns:1fr;}.cart-drawer{width:100%;}
+  .co-head{padding:24px 20px;}.co-body{padding:24px 20px;}
+  .form-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;}
+}
+@media(max-width:400px){.products-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="toast"><span class="ti">✓</span><span id="toastMsg">Agregado a la bolsa</span></div>
+<div class="drawer-backdrop" id="backdrop" onclick="closeCart()"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">Maison Lune</div>
+    <ul class="nav-links">
+      <li><a id="nav-home" onclick="showPage('home')" class="active">Inicio</a></li>
+      <li><a id="nav-coleccion" onclick="showPage('coleccion')">Colección</a></li>
+      <li><a id="nav-mujer" onclick="showPage('mujer')">Mujer</a></li>
+      <li><a id="nav-hombre" onclick="showPage('hombre')">Hombre</a></li>
+      <li><a id="nav-accesorios" onclick="showPage('accesorios')">Accesorios</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="search-toggle" onclick="toggleSearch()">⌕</button>
+      <button class="cart-btn" onclick="openCart()">Bolsa <span class="cart-count" id="cartCount">0</span></button>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a id="mnav-home" onclick="showPage('home');closeMenu()" class="active">Inicio</a>
+  <a id="mnav-coleccion" onclick="showPage('coleccion');closeMenu()">Colección</a>
+  <a id="mnav-mujer" onclick="showPage('mujer');closeMenu()">Mujer</a>
+  <a id="mnav-hombre" onclick="showPage('hombre');closeMenu()">Hombre</a>
+  <a id="mnav-accesorios" onclick="showPage('accesorios');closeMenu()">Accesorios</a>
+</div>
+<div class="search-bar" id="searchBar">
+  <input class="search-input" id="searchInput" placeholder="Buscar prendas, colecciones..." oninput="handleSearch(this.value)">
+  <button class="search-close" onclick="clearSearch()">×</button>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Colección Primavera 2025</div>
+      <h1 class="hero-title">Elegancia<br><em>sin esfuerzo.</em></h1>
+      <p class="hero-sub">Piezas atemporales para la mujer y el hombre contemporáneos. Materiales de primera, siluetas que permanecen.</p>
+      <div class="hero-ctas">
+        <button class="btn-dark" onclick="showPage('coleccion')">Explorar Colección</button>
+        <button class="btn-line" onclick="showPage('mujer')">Mujer</button>
+        <button class="btn-line" onclick="showPage('hombre')">Hombre</button>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric"><div class="metric-num">14</div><div class="metric-label">Colecciones</div></div>
+        <div class="metric"><div class="metric-num">340</div><div class="metric-label">Piezas</div></div>
+        <div class="metric"><div class="metric-num">9+</div><div class="metric-label">Años</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85&auto=format&fit=crop&crop=top" alt="Hero">
+      <div class="hero-badge"><div class="badge-top">Destacado</div><div class="badge-val">Colección Lune Noire</div></div>
+    </div>
+  </section>
+  <div class="marquee"><div class="marquee-inner">
+    <span class="marquee-item">Envío gratis desde $600.000</span><span class="marquee-item">Devoluciones sin cargo</span>
+    <span class="marquee-item">Materiales sostenibles</span><span class="marquee-item">Ediciones limitadas</span>
+    <span class="marquee-item">Asesoría de estilo gratis</span><span class="marquee-item">Envío internacional</span>
+    <span class="marquee-item">Envío gratis desde $600.000</span><span class="marquee-item">Devoluciones sin cargo</span>
+    <span class="marquee-item">Materiales sostenibles</span><span class="marquee-item">Ediciones limitadas</span>
+    <span class="marquee-item">Asesoría de estilo gratis</span><span class="marquee-item">Envío internacional</span>
+  </div></div>
+  <section class="catalog-section">
+    <div class="section-header">
+      <div class="section-tag">Nuevas Llegadas</div>
+      <h2 class="section-title">Lo Más Reciente</h2>
+      <p class="section-sub">Una selección de las piezas más esperadas de esta temporada</p>
+    </div>
+    <div class="products-grid" id="homeGrid"></div>
+  </section>
+  <div class="editorial">
+    <div class="ed-item"><div class="ed-num">100%</div><div class="ed-label">Materiales Naturales</div><div class="ed-desc">Lino, seda y algodón orgánico certificados</div></div>
+    <div class="ed-div"></div>
+    <div class="ed-item"><div class="ed-num">48h</div><div class="ed-label">Envío Express</div><div class="ed-desc">Entrega rápida a Colombia y Latinoamérica</div></div>
+    <div class="ed-div"></div>
+    <div class="ed-item"><div class="ed-num">30d</div><div class="ed-label">Devoluciones</div><div class="ed-desc">Política sin preguntas, cómoda y gratuita</div></div>
+  </div>
+  <footer><div class="footer-logo">Maison Lune</div><div class="footer-copy">© 2025 Maison Lune. Moda contemporánea.</div></footer>
+</div>
+
+<!-- COLECCIÓN -->
+<div id="page-coleccion" class="page">
+  <div class="page-hero">
+    <div class="page-hero-tag">Temporada 2025</div>
+    <h1>Colección <em>Completa</em></h1>
+    <p>Todas las piezas de la temporada en un solo lugar. Mujer, hombre y accesorios curados con atención al detalle.</p>
+  </div>
+  <section class="catalog-section">
+    <div class="tab-bar"><div class="tab-bar-inner">
+      <button class="tab-btn active" onclick="filterCol('all',this)">Todo</button>
+      <button class="tab-btn" onclick="filterCol('mujer',this)">Mujer</button>
+      <button class="tab-btn" onclick="filterCol('hombre',this)">Hombre</button>
+      <button class="tab-btn" onclick="filterCol('accesorios',this)">Accesorios</button>
+    </div></div>
+    <div id="colSearchLabel" class="search-results-label" style="display:none"></div>
+    <div class="products-grid" id="colGrid"></div>
+  </section>
+  <footer><div class="footer-logo">Maison Lune</div><div class="footer-copy">© 2025 Maison Lune.</div></footer>
+</div>
+
+<!-- MUJER -->
+<div id="page-mujer" class="page">
+  <div class="page-hero">
+    <div class="page-hero-tag">Moda Femenina</div>
+    <h1>Colección <em>Mujer</em></h1>
+    <p>Prendas que celebran la feminidad contemporánea. Cada pieza diseñada para adaptarse a tu ritmo de vida.</p>
+  </div>
+  <div class="lookbook-strip" id="mujerLookbook"></div>
+  <section class="catalog-section" style="padding-top:0">
+    <div class="section-header">
+      <div class="section-tag">Catálogo Femenino</div>
+      <h2 class="section-title">Todas las Piezas</h2>
+    </div>
+    <div class="tab-bar"><div class="tab-bar-inner">
+      <button class="tab-btn active" onclick="filterMujer('all',this)">Todo</button>
+      <button class="tab-btn" onclick="filterMujer('vestidos',this)">Vestidos</button>
+      <button class="tab-btn" onclick="filterMujer('tops',this)">Tops y Blazers</button>
+      <button class="tab-btn" onclick="filterMujer('pantalones',this)">Pantalones</button>
+    </div></div>
+    <div class="products-grid" id="mujerGrid"></div>
+  </section>
+  <footer><div class="footer-logo">Maison Lune</div><div class="footer-copy">© 2025 Maison Lune.</div></footer>
+</div>
+
+<!-- HOMBRE -->
+<div id="page-hombre" class="page">
+  <div class="page-hero">
+    <div class="page-hero-tag">Moda Masculina</div>
+    <h1>Colección <em>Hombre</em></h1>
+    <p>Prendas de autor para el hombre moderno. Cortes precisos, telas premium, estilo sin esfuerzo.</p>
+  </div>
+  <div class="lookbook-strip" id="hombreLookbook"></div>
+  <section class="catalog-section" style="padding-top:0">
+    <div class="section-header">
+      <div class="section-tag">Catálogo Masculino</div>
+      <h2 class="section-title">Todas las Piezas</h2>
+    </div>
+    <div class="tab-bar"><div class="tab-bar-inner">
+      <button class="tab-btn active" onclick="filterHombre('all',this)">Todo</button>
+      <button class="tab-btn" onclick="filterHombre('camisas',this)">Camisas</button>
+      <button class="tab-btn" onclick="filterHombre('pantalones',this)">Pantalones</button>
+      <button class="tab-btn" onclick="filterHombre('outerwear',this)">Outerwear</button>
+    </div></div>
+    <div class="products-grid" id="hombreGrid"></div>
+  </section>
+  <footer><div class="footer-logo">Maison Lune</div><div class="footer-copy">© 2025 Maison Lune.</div></footer>
+</div>
+
+<!-- ACCESORIOS -->
+<div id="page-accesorios" class="page">
+  <div class="page-hero">
+    <div class="page-hero-tag">El Detalle Perfecto</div>
+    <h1>Accesorios <em>Lune</em></h1>
+    <p>Los complementos que elevan cualquier look. Bolsos, joyería y más con la esencia de Maison Lune.</p>
+  </div>
+  <div class="acc-featured" id="accFeatured"></div>
+  <section class="catalog-section" style="padding-top:32px">
+    <div class="section-header">
+      <div class="section-tag">Catálogo</div>
+      <h2 class="section-title">Todos los Accesorios</h2>
+    </div>
+    <div class="tab-bar"><div class="tab-bar-inner">
+      <button class="tab-btn active" onclick="filterAcc('all',this)">Todo</button>
+      <button class="tab-btn" onclick="filterAcc('bolsos',this)">Bolsos</button>
+      <button class="tab-btn" onclick="filterAcc('joyeria',this)">Joyería</button>
+      <button class="tab-btn" onclick="filterAcc('cinturones',this)">Cinturones</button>
+    </div></div>
+    <div class="products-grid" id="accGrid"></div>
+  </section>
+  <footer><div class="footer-logo">Maison Lune</div><div class="footer-copy">© 2025 Maison Lune.</div></footer>
+</div>
+
+<!-- MODAL — simplified: one image, no colors, no sizes -->
+<div class="modal-overlay" id="productModal" onclick="handleModalClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-imgs">
+      <div class="modal-main-img"><img id="mMainImg" src="" alt=""></div>
+    </div>
+    <div class="modal-details">
+      <div class="m-tag" id="mTag" style="display:none"></div>
+      <div class="m-cat" id="mCat"></div>
+      <div class="m-name" id="mName"></div>
+      <div class="m-price-row">
+        <span class="m-price" id="mPrice"></span>
+        <span class="m-price-old" id="mPriceOld"></span>
+      </div>
+      <div class="m-rating"><span class="m-stars">★★★★★</span><span id="mRating"></span></div>
+      <div class="m-desc" id="mDesc"></div>
+      <div class="m-divider"></div>
+      <div class="m-qty">
+        <span class="qty-label">Cantidad</span>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <div class="qty-num" id="qtyNum">1</div>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <button class="m-add-btn" onclick="addToCartFromModal()">Agregar a la Bolsa</button>
+      <button class="m-wish-btn">♡ Guardar en Favoritos</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title">Mi Bolsa <span id="cartItemCount">0 piezas</span></div>
+    <button class="close-drawer" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><span class="cart-empty-sym">◇</span><p>Tu bolsa está vacía</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-rows">
+      <div class="cart-row"><span>Subtotal</span><span id="cartSub">$0</span></div>
+      <div class="cart-row"><span>Envío</span><span id="cartShip">Por calcular</span></div>
+      <div class="cart-row total"><span>Total</span><span id="cartTotal">$0</span></div>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>Finalizar Compra →</button>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <button class="modal-close" onclick="closeCheckout()" style="position:fixed;top:20px;right:20px;z-index:20;">×</button>
+    <div id="checkoutForm">
+      <div class="co-head"><h2 class="co-title">Finalizar Compra</h2><p class="co-sub">Proceso seguro · Encriptación SSL</p></div>
+      <div class="co-body">
+        <div class="form-section"><div class="form-section-title" data-n="01">Información Personal</div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="fname" placeholder="Tu nombre"></div>
+            <div class="form-group"><label class="form-label">Apellido</label><input class="form-input" id="lname" placeholder="Tu apellido"></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="email" placeholder="email@ejemplo.com"></div>
+            <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="phone" placeholder="+57 300 0000000"></div>
+          </div>
+        </div>
+        <div class="form-section"><div class="form-section-title" data-n="02">Dirección de Envío</div>
+          <div class="form-grid full"><div class="form-group"><label class="form-label">Dirección</label><input class="form-input" id="address" placeholder="Calle y número"></div></div>
+          <div class="form-grid" style="margin-top:12px;">
+            <div class="form-group"><label class="form-label">Ciudad</label><input class="form-input" id="city" placeholder="Bogotá"></div>
+            <div class="form-group"><label class="form-label">Código Postal</label><input class="form-input" id="zip" placeholder="110111"></div>
+          </div>
+        </div>
+        <div class="form-section"><div class="form-section-title" data-n="03">Método de Pago</div>
+          <div class="form-grid full"><div class="form-group"><label class="form-label">Número de Tarjeta</label><input class="form-input" id="card" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"></div></div>
+          <div class="form-grid" style="margin-top:12px;">
+            <div class="form-group"><label class="form-label">Vencimiento</label><input class="form-input" id="expiry" placeholder="MM/AA" maxlength="5" oninput="formatExpiry(this)"></div>
+            <div class="form-group"><label class="form-label">CVV</label><input class="form-input" id="cvv" placeholder="123" maxlength="3"></div>
+          </div>
+        </div>
+        <div class="order-summary"><div class="os-title">Resumen del Pedido</div><div id="orderSummary"></div></div>
+        <button class="place-btn" onclick="placeOrder()">Confirmar Pedido →</button>
+      </div>
+    </div>
+    <div class="success-screen" id="successScreen">
+      <div class="success-sym">✓</div>
+      <h3 class="success-title">Pedido Confirmado</h3>
+      <p class="success-sub">Gracias por elegir Maison Lune. Tu pedido está siendo preparado con cuidado. Recibirás confirmación por email en breve.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = {
+  mujer: [
+    { id:1, name:'Vestido Midi Éclat', subcat:'vestidos', tag:'Nuevo', price:739000, oldPrice:879000, rating:4.9, reviews:87,
+      img:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=85&auto=format&fit=crop',
+      desc:'Vestido midi en seda fluida con escote en V profundo y mangas abullonadas. Corte al bies que acompaña cada movimiento.' },
+    { id:2, name:'Blazer Structuré', subcat:'tops', tag:'Exclusivo', price:979000, oldPrice:null, rating:4.8, reviews:54,
+      img:'https://images.unsplash.com/photo-1548624313-0396c75e4b1a?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Blazer de lana italiana sin forro con estructura suave. Botones de nácar, forro de seda natural. El clásico reinventado.' },
+    { id:3, name:'Pantalón Palazzo', subcat:'pantalones', tag:'Sale', price:555000, oldPrice:659000, rating:4.7, reviews:142,
+      img:'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Pantalón de pierna ancha en viscosa premium. Tiro alto que estiliza la figura, con bolsillos profundos funcionales.' },
+    { id:4, name:'Cardigan Merino', subcat:'tops', tag:'Oferta', price:470000, oldPrice:579000, rating:4.6, reviews:211,
+      img:'https://images.unsplash.com/photo-1434510423563-c6c6353a1040?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Cardigan de lana merino extra-fina tejido en punto calado. Tacto extraordinario, pieza cápsula de armario.' },
+    { id:5, name:'Falda Midi Plissé', subcat:'pantalones', tag:null, price:619000, oldPrice:null, rating:4.7, reviews:73,
+      img:'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Falda midi plisada en satén de acetato. Movimiento suave y elegante, cintura elástica cómoda. Versátil de día y de noche.' },
+    { id:6, name:'Vestido Lencero Slip', subcat:'vestidos', tag:'Sale', price:659000, oldPrice:779000, rating:4.7, reviews:61,
+      img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Slip dress en satén de acetato con corte al bies. Tiras ajustables, ribete en encaje, forro de seda natural.' },
+    { id:7, name:'Abrigo Oversize Camel', subcat:'tops', tag:'Oferta', price:1579000, oldPrice:1799000, rating:4.9, reviews:48,
+      img:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Abrigo oversize en mezcla de cachemira y lana virgen. Corte recto, cuello solapado amplio, forro completo.' },
+    { id:8, name:'Crop Top Lino', subcat:'tops', tag:'Nuevo', price:315000, oldPrice:null, rating:4.5, reviews:92,
+      img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Top corto en lino suavizado con lavado enzimático. Escote recto y mangas cortas, tela de respirabilidad máxima.' },
+    { id:9, name:'Trench Clásico', subcat:'tops', tag:'Premium', price:1279000, oldPrice:null, rating:4.8, reviews:35,
+      img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Trench clásico en gabardina de algodón 100%. Forro estampado, correa al talle y cinturón. La pieza comodín por excelencia.' },
+    { id:10, name:'Jumpsuit Seda', subcat:'vestidos', tag:'Nuevo', price:689000, oldPrice:null, rating:4.8, reviews:43,
+      img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=85&auto=format&fit=crop',
+      desc:'Mono entero en seda lavada con cinturón de tela, escote en V y pernera amplia. Elegancia sin esfuerzo.' },
+    { id:11, name:'Blusa Bouclé', subcat:'tops', tag:'Exclusivo', price:419000, oldPrice:null, rating:4.7, reviews:61,
+      img:'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=85&auto=format&fit=crop',
+      desc:'Blusa en tejido bouclé con perlas cosidas a mano en el cuello. Pieza artesanal, edición limitada.' },
+    { id:12, name:'Vestido Camisero Lino', subcat:'vestidos', tag:'Sale', price:459000, oldPrice:549000, rating:4.6, reviews:88,
+      img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&q=85&auto=format&fit=crop',
+      desc:'Vestido camisero en lino lavado con botones de nácar y cinturón de tela. Perfecto para el día.' },
+    { id:13, name:'Pantalón Cuero Eco', subcat:'pantalones', tag:'Premium', price:779000, oldPrice:null, rating:4.8, reviews:34,
+      img:'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=600&q=85&auto=format&fit=crop',
+      desc:'Pantalón slim en cuero ecológico con acabado mate. Tiro alto, bolsillos laterales y cierre oculto.' },
+    { id:14, name:'Top Seda Fruncido', subcat:'tops', tag:'Nuevo', price:349000, oldPrice:null, rating:4.5, reviews:72,
+      img:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=85&auto=format&fit=crop',
+      desc:'Top en seda fruncida con tirantes ajustables. Tejido suave al tacto, ideal para superponer.' },
+    { id:15, name:'Falda Asimétrica', subcat:'pantalones', tag:'Oferta', price:389000, oldPrice:469000, rating:4.7, reviews:56,
+      img:'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&q=85&auto=format&fit=crop',
+      desc:'Falda asimétrica midi en crepé de seda. Corte en diagonal que alarga la silueta.' },
+    { id:16, name:'Blazer Oversize Tweed', subcat:'tops', tag:'Exclusivo', price:849000, oldPrice:999000, rating:4.9, reviews:29,
+      img:'https://images.unsplash.com/photo-1548624313-0396c75e4b1a?w=600&q=85&auto=format&fit=crop',
+      desc:'Blazer oversize en tweed multicolor con botones dorados. Forro interior en satén.' },
+    { id:17, name:'Vestido Cutout Bandage', subcat:'vestidos', tag:'Sale', price:559000, oldPrice:659000, rating:4.6, reviews:97,
+      img:'https://images.unsplash.com/photo-1595777457583-95e059f58196?w=600&q=85&auto=format&fit=crop',
+      desc:'Vestido bodycon con cutouts laterales en tejido bandage elástico. Silueta escultural.' },
+    { id:18, name:'Conjunto Lino Pantalón', subcat:'pantalones', tag:'Nuevo', price:739000, oldPrice:null, rating:4.8, reviews:48,
+      img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=85&auto=format&fit=crop',
+      desc:'Conjunto de blusa y pantalón palazzo en lino premium. Combinación perfecta para cualquier ocasión.' }
+  ],
+  hombre: [
+    { id:20, name:'Camisa Oxford Slim', subcat:'camisas', tag:'Nuevo', price:459000, oldPrice:null, rating:4.8, reviews:78,
+      img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Camisa oxford de algodón peinado slim fit. Cuello italiano, botones de nácar, costura francesa.' },
+    { id:21, name:'Pantalón Chino Linen', subcat:'pantalones', tag:'Sale', price:579000, oldPrice:699000, rating:4.7, reviews:134,
+      img:'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Pantalón chino en mezcla lino-algodón. Corte recto clásico con pinzas, cinturilla con trabillas.' },
+    { id:22, name:'Blazer Desestructurado', subcat:'outerwear', tag:'Exclusivo', price:1139000, oldPrice:null, rating:4.9, reviews:42,
+      img:'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Blazer sin forro en lana virgen italiana. Caída natural impecable, hombreras mínimas. El outerwear definitivo.' },
+    { id:23, name:'Sudadera Cashmere Blend', subcat:'outerwear', tag:'Oferta', price:779000, oldPrice:919000, rating:4.7, reviews:89,
+      img:'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=600&q=85&auto=format&fit=crop',
+      desc:'Sudadera en mezcla de cachemira y algodón supima. Tacto extraordinario, canalé en puños y dobladillo.' },
+    { id:24, name:'Camiseta Pima Essential', subcat:'camisas', tag:null, price:259000, oldPrice:null, rating:4.6, reviews:256,
+      img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Camiseta de algodón pima peruano 200g/m². Cuello acanalado reforzado, costura lateral continua. La básica perfecta.' },
+    { id:25, name:'Field Jacket Canvas', subcat:'outerwear', tag:'Sale', price:1279000, oldPrice:1459000, rating:4.8, reviews:63,
+      img:'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Chaqueta field en canvas de algodón encerado. Múltiples bolsillos, forro en algodón, corte recto contemporáneo.' },
+    { id:26, name:'Jean Selvedge 14oz', subcat:'pantalones', tag:'Premium', price:839000, oldPrice:null, rating:4.9, reviews:38,
+      img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Jean en denim selvedge japonés 14oz. Teñido con índigo vegetal, cinco bolsillos, mejora con el uso.' },
+    { id:27, name:'Polo Piquet Premium', subcat:'camisas', tag:'Oferta', price:379000, oldPrice:459000, rating:4.6, reviews:107,
+      img:'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=85&auto=format&fit=crop&crop=top',
+      desc:'Polo de punto piquet en algodón mercerizado. Antibacteriano natural, transpirable, botones de nácar.' },
+    { id:28, name:'Camisa Lino Bandas', subcat:'camisas', tag:'Nuevo', price:389000, oldPrice:null, rating:4.7, reviews:54,
+      img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=85&auto=format&fit=crop',
+      desc:'Camisa de lino con detalles de bandas horizontales tejidas. Cuello mao, manga corta.' },
+    { id:29, name:'Jogger Cachemira Blend', subcat:'pantalones', tag:'Premium', price:699000, oldPrice:null, rating:4.8, reviews:38,
+      img:'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=85&auto=format&fit=crop',
+      desc:'Pantalón jogger en mezcla de cachemira y modal. Elástico en cintura y tobillo con acabado mate.' },
+    { id:30, name:'Abrigo Gabardina',  subcat:'outerwear', tag:'Sale', price:1379000, oldPrice:1579000, rating:4.8, reviews:41,
+      img:'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=85&auto=format&fit=crop',
+      desc:'Abrigo doble botonadura en gabardina de algodón. Corte clásico con solapa pico.' },
+    { id:31, name:'Camisa Cuadros Franela', subcat:'camisas', tag:'Oferta', price:319000, oldPrice:389000, rating:4.6, reviews:112,
+      img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=85&auto=format&fit=crop',
+      desc:'Camisa de cuadros en franela suavizada. Corte relaxed, bolsillo pecho y puños con botón.' },
+    { id:32, name:'Chaleco Sastre', subcat:'outerwear', tag:'Exclusivo', price:489000, oldPrice:null, rating:4.7, reviews:33,
+      img:'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=85&auto=format&fit=crop',
+      desc:'Chaleco sastre en lana virgen italiana con forro de seda. Cinco botones forrados a mano.' },
+    { id:33, name:'Pantalón Jogger Técnico', subcat:'pantalones', tag:'Nuevo', price:419000, oldPrice:null, rating:4.7, reviews:67,
+      img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=85&auto=format&fit=crop',
+      desc:'Jogger en tejido técnico antihumedad con detalles de costuras visibles. Diseño athleisure.' },
+    { id:34, name:'Bomber Nylon Premium', subcat:'outerwear', tag:'Oferta', price:699000, oldPrice:849000, rating:4.8, reviews:58,
+      img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=85&auto=format&fit=crop',
+      desc:'Bomber en nylon premium con forro interior de satén y logo bordado en el pecho.' },
+    { id:35, name:'Camiseta Piqué Lisa', subcat:'camisas', tag:null, price:219000, oldPrice:null, rating:4.5, reviews:143,
+      img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=85&auto=format&fit=crop',
+      desc:'Camiseta de piqué de algodón peinado. Cuello redondo reforzado, sin costuras laterales.' }
+  ],
+  accesorios: [
+    { id:40, name:'Sac Minimaliste', subcat:'bolsos', tag:'Premium', price:779000, oldPrice:null, rating:4.9, reviews:38,
+      img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=85&auto=format&fit=crop',
+      desc:'Bolso de cuero italiano full-grain con acabado mate. Correa ajustable y herrajes bañados en oro 18k.' },
+    { id:41, name:'Collar Perlas Barrocas', subcat:'joyeria', tag:'Exclusivo', price:979000, oldPrice:1119000, rating:4.8, reviews:29,
+      img:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85&auto=format&fit=crop',
+      desc:'Collar de perlas barrocas de agua dulce. Cierre de plata 925, pieza artesanal, edición limitada de 50 unidades.' },
+    { id:42, name:'Cinturón Trenzado', subcat:'cinturones', tag:null, price:339000, oldPrice:null, rating:4.7, reviews:56,
+      img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=85&auto=format&fit=crop',
+      desc:'Cinturón de cuero trenzado a mano. Hebilla de latón mate satinado, disponible en 4 largos.' },
+    { id:43, name:'Clutch Soirée', subcat:'bolsos', tag:'Sale', price:579000, oldPrice:699000, rating:4.7, reviews:44,
+      img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=85&auto=format&fit=crop',
+      desc:'Clutch de noche en satén con cadena de metal dorado removible. Cierre invisible, espejo interior.' },
+    { id:44, name:'Aretes Sculptés', subcat:'joyeria', tag:'Nuevo', price:355000, oldPrice:null, rating:4.6, reviews:67,
+      img:'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=85&auto=format&fit=crop',
+      desc:'Aretes de plata 925 con baño de oro. Diseño geométrico escultórico, ligeros y modernos. Cierre de presión.' },
+    { id:45, name:'Tote Lino Maison', subcat:'bolsos', tag:null, price:459000, oldPrice:null, rating:4.8, reviews:83,
+      img:'https://images.unsplash.com/photo-1563904092230-7ec217b65fe2?w=600&q=85&auto=format&fit=crop',
+      desc:'Tote bag de lino lavado con bolsillo interior zipado. Asa larga en cuero vegano, bordado del logo.' },
+    { id:46, name:'Cinturón Hebilla Oro', subcat:'cinturones', tag:'Nuevo', price:439000, oldPrice:null, rating:4.8, reviews:34,
+      img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=85&auto=format&fit=crop',
+      desc:'Cinturón de cuero liso, ancho 3cm, con hebilla de metal dorado envejecido. Sin perforaciones, ajuste continuo.' },
+    { id:47, name:'Pañuelo Soie Imprimé', subcat:'joyeria', tag:'Oferta', price:299000, oldPrice:379000, rating:4.7, reviews:91,
+      img:'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=85&auto=format&fit=crop',
+      desc:'Pañuelo 90×90cm en seda 100% con estampado floral original. Acabado hand-rolled, doble de satén.' },
+    { id:48, name:'Bolso Baguette Cuero', subcat:'bolsos', tag:'Nuevo', price:649000, oldPrice:null, rating:4.8, reviews:52,
+      img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=85&auto=format&fit=crop',
+      desc:'Bolso baguette en cuero granulado con correa trenzada. Herrajes dorados, cierre magnético.' },
+    { id:49, name:'Gargantilla Minimalista', subcat:'joyeria', tag:'Nuevo', price:189000, oldPrice:null, rating:4.7, reviews:87,
+      img:'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85&auto=format&fit=crop',
+      desc:'Gargantilla de plata 925 con cadena fina y colgante geométrico de 3mm. Cierre de langosta.' },
+    { id:50, name:'Cinturón Cuero Fino', subcat:'cinturones', tag:'Sale', price:249000, oldPrice:299000, rating:4.6, reviews:64,
+      img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=85&auto=format&fit=crop',
+      desc:'Cinturón en cuero liso de alta curtición, ancho 2cm. Ideal para vestidos y pantalones.' },
+    { id:51, name:'Bolso Bucket Mini', subcat:'bolsos', tag:'Exclusivo', price:889000, oldPrice:null, rating:4.9, reviews:31,
+      img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=85&auto=format&fit=crop',
+      desc:'Mini bucket bag en cuero suave con cordón de cierre y asa larga regulable.' },
+    { id:52, name:'Pulsera Cadena Dorada', subcat:'joyeria', tag:'Nuevo', price:159000, oldPrice:null, rating:4.6, reviews:93,
+      img:'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=85&auto=format&fit=crop',
+      desc:'Pulsera de cadena en oro de 18k. Eslabones anchos alternados, cierre de langosta.' },
+    { id:53, name:'Mochila Cuero Weekend', subcat:'bolsos', tag:'Premium', price:1290000, oldPrice:null, rating:4.8, reviews:27,
+      img:'https://images.unsplash.com/photo-1563904092230-7ec217b65fe2?w=600&q=85&auto=format&fit=crop',
+      desc:'Mochila en cuero full-grain con doble compartimiento, bolsillo oculto y asas reforzadas.' },
+    { id:54, name:'Broche Esmaltado', subcat:'joyeria', tag:'Oferta', price:129000, oldPrice:169000, rating:4.5, reviews:118,
+      img:'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=85&auto=format&fit=crop',
+      desc:'Broche artesanal en forma floral con esmalte cloisonné. Base de latón bañado en oro.' }
+  ]
+};
+
+const allP = [
+  ...DB.mujer.map(p=>({...p,gender:'mujer'})),
+  ...DB.hombre.map(p=>({...p,gender:'hombre'})),
+  ...DB.accesorios.map(p=>({...p,gender:'accesorios'}))
+];
+
+let cart=[], currentProduct=null, currentQty=1, colFilter='all', currentSearch='';
+
+/* ── PAGES ── */
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-links a,.mobile-menu a').forEach(a=>a.classList.remove('active'));
+  const n=document.getElementById('nav-'+page),mn=document.getElementById('mnav-'+page);
+  if(n)n.classList.add('active');if(mn)mn.classList.add('active');
+  window.scrollTo(0,0);document.body.style.overflow='';
+  if(page==='home')renderGrid('homeGrid',allP.filter(p=>p.rating>=4.8).slice(0,6));
+  if(page==='coleccion')renderCol('all');
+  if(page==='mujer'){renderLookbook('mujerLookbook',DB.mujer);renderGrid('mujerGrid',DB.mujer.map(p=>({...p,gender:'mujer'})));}
+  if(page==='hombre'){renderLookbook('hombreLookbook',DB.hombre);renderGrid('hombreGrid',DB.hombre.map(p=>({...p,gender:'hombre'})));}
+  if(page==='accesorios'){renderAccFeat();renderGrid('accGrid',DB.accesorios.map(p=>({...p,gender:'accesorios'})));}
+}
+
+/* ── CARD — no swatches ── */
+function cardHTML(p){
+  const gL=p.gender==='mujer'?'Mujer':p.gender==='hombre'?'Hombre':'Accesorio';
+  return`<div class="product-card">
+    <div class="product-img-wrap">
+      ${p.tag?`<div class="prod-tag">${p.tag}</div>`:''}
+      <button class="prod-wish" onclick="event.stopPropagation()">♡</button>
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      <div class="prod-overlay">
+        <button class="ov-view" onclick="openModal(${p.id})">Ver Detalle</button>
+        <button class="ov-bag" onclick="quickAdd(${p.id})">+ Bolsa</button>
+      </div>
+    </div>
+    <div class="prod-info">
+      <div class="prod-cat">${gL} · ${p.subcat}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-footer">
+        <span class="prod-price">${'$'+p.price.toLocaleString('es-CO')}</span>
+        ${p.oldPrice?`<span class="prod-price-old">${'$'+p.oldPrice.toLocaleString('es-CO')}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(id,list){
+  const g=document.getElementById(id);
+  if(!list||!list.length){g.innerHTML='<div class="empty-state"><div class="empty-sym">◇</div><div class="empty-title">Sin resultados</div><div class="empty-sub">No encontramos piezas</div></div>';return;}
+  g.innerHTML=list.map(cardHTML).join('');
+}
+
+/* ── FILTERS ── */
+function renderCol(f){renderGrid('colGrid',f==='all'?allP:allP.filter(p=>p.gender===f));}
+function filterCol(f,btn){document.querySelectorAll('#page-coleccion .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');colFilter=f;renderCol(f);}
+function filterMujer(f,btn){document.querySelectorAll('#page-mujer .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGrid('mujerGrid',f==='all'?DB.mujer.map(p=>({...p,gender:'mujer'})):DB.mujer.filter(p=>p.subcat===f).map(p=>({...p,gender:'mujer'})));}
+function filterHombre(f,btn){document.querySelectorAll('#page-hombre .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGrid('hombreGrid',f==='all'?DB.hombre.map(p=>({...p,gender:'hombre'})):DB.hombre.filter(p=>p.subcat===f).map(p=>({...p,gender:'hombre'})));}
+function filterAcc(f,btn){document.querySelectorAll('#page-accesorios .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGrid('accGrid',f==='all'?DB.accesorios.map(p=>({...p,gender:'accesorios'})):DB.accesorios.filter(p=>p.subcat===f).map(p=>({...p,gender:'accesorios'})));}
+
+/* ── LOOKBOOK ── */
+function renderLookbook(id,list){
+  document.getElementById(id).innerHTML=list.slice(0,3).map(p=>`
+    <div class="lbook-item" onclick="openModal(${p.id})">
+      ${p.tag?`<div class="lbook-tag">${p.tag}</div>`:''}
+      <img src="${p.img}" alt="${p.name}">
+      <div class="lbook-caption"><div class="lbook-name">${p.name}</div><div class="lbook-price">desde $${p.price.toLocaleString('es-CO')}</div></div>
+    </div>`).join('');
+}
+
+/* ── ACC FEATURED ── */
+function renderAccFeat(){
+  document.getElementById('accFeatured').innerHTML=DB.accesorios.slice(0,2).map(p=>`
+    <div class="acc-feat-item" onclick="openModal(${p.id})">
+      <img src="${p.img}" alt="${p.name}">
+      <div class="acc-feat-label"><div class="acc-feat-title">${p.name}</div><div class="acc-feat-sub">desde $${p.price.toLocaleString('es-CO')}</div></div>
+    </div>`).join('');
+}
+
+/* ── SEARCH ── */
+let searchOpen=false;
+function toggleSearch(){searchOpen=!searchOpen;document.getElementById('searchBar').classList.toggle('open',searchOpen);if(searchOpen)setTimeout(()=>document.getElementById('searchInput').focus(),280);}
+function clearSearch(){document.getElementById('searchInput').value='';currentSearch='';document.getElementById('colSearchLabel').style.display='none';renderCol(colFilter);toggleSearch();}
+function handleSearch(val){
+  currentSearch=val;const lbl=document.getElementById('colSearchLabel');
+  if(val.trim()){
+    const q=val.toLowerCase();
+    const res=allP.filter(p=>p.name.toLowerCase().includes(q)||p.subcat.toLowerCase().includes(q)||p.gender.toLowerCase().includes(q));
+    lbl.style.display='block';lbl.innerHTML=`Mostrando <span>${res.length} resultados</span> para "${val}"`;
+    renderGrid('colGrid',res);
+  } else {lbl.style.display='none';renderCol(colFilter);}
+  if(!document.getElementById('page-coleccion').classList.contains('active'))showPage('coleccion');
+}
+
+/* ── MOBILE ── */
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
+
+/* ── MODAL — simplified ── */
+function openModal(id){
+  currentProduct=allP.find(p=>p.id===id);
+  currentQty=1;
+  document.getElementById('qtyNum').textContent='1';
+  document.getElementById('mMainImg').src=currentProduct.img;
+  const tagEl=document.getElementById('mTag');
+  if(currentProduct.tag){tagEl.textContent=currentProduct.tag;tagEl.style.display='inline-block';}
+  else tagEl.style.display='none';
+  document.getElementById('mCat').textContent=currentProduct.gender+' · '+currentProduct.subcat;
+  document.getElementById('mName').textContent=currentProduct.name;
+  document.getElementById('mPrice').textContent='$'+currentProduct.price.toLocaleString('es-CO');
+  document.getElementById('mPriceOld').textContent=currentProduct.oldPrice?'$'+currentProduct.oldPrice.toLocaleString('es-CO'):'';
+  document.getElementById('mRating').textContent=currentProduct.rating+' · '+currentProduct.reviews+' reseñas';
+  document.getElementById('mDesc').textContent=currentProduct.desc;
+  document.getElementById('productModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('productModal').classList.remove('open');document.body.style.overflow='';}
+function handleModalClick(e){if(e.target===e.currentTarget)closeModal();}
+function changeQty(d){currentQty=Math.max(1,currentQty+d);document.getElementById('qtyNum').textContent=currentQty;}
+
+/* ── TOAST ── */
+let toastTimer;
+function showToast(msg){clearTimeout(toastTimer);document.getElementById('toastMsg').textContent=msg;document.getElementById('toast').classList.add('show');toastTimer=setTimeout(()=>document.getElementById('toast').classList.remove('show'),2800);}
+
+/* ── CART ── */
+function addToCartFromModal(){
+  if(!currentProduct)return;
+  const key=String(currentProduct.id);
+  const ex=cart.find(i=>i.key===key);
+  if(ex)ex.qty+=currentQty;
+  else cart.push({...currentProduct,qty:currentQty,key});
+  updateCart();closeModal();openCart();showToast(currentProduct.name+' agregado');
+}
+
+function quickAdd(id){
+  const p=allP.find(x=>x.id===id);
+  const key=String(p.id);
+  const ex=cart.find(i=>i.key===key);
+  if(ex)ex.qty++;
+  else cart.push({...p,qty:1,key});
+  updateCart();showToast(p.name+' agregado');
+}
+
+function cartQty(key,d){const it=cart.find(i=>i.key===key);if(!it)return;it.qty=Math.max(1,it.qty+d);updateCart();}
+function removeFromCart(key){cart=cart.filter(i=>i.key!==key);updateCart();}
+
+function updateCart(){
+  const count=cart.reduce((s,i)=>s+i.qty,0);
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const ship=sub>=600000?0:12000;
+  document.getElementById('cartCount').textContent=count;
+  const cc=document.getElementById('cartCount');cc.classList.add('bump');setTimeout(()=>cc.classList.remove('bump'),400);
+  document.getElementById('cartItemCount').textContent=count+(count!==1?' piezas':' pieza');
+  document.getElementById('cartSub').textContent='$'+sub.toLocaleString('es-CO');
+  document.getElementById('cartShip').textContent=ship===0?'Gratis':'$'+ship.toLocaleString('es-CO');
+  document.getElementById('cartTotal').textContent='$'+(sub+ship).toLocaleString('es-CO');
+  document.getElementById('checkoutBtn').disabled=!cart.length;
+  const el=document.getElementById('cartItems');
+  if(!cart.length){el.innerHTML='<div class="cart-empty"><span class="cart-empty-sym">◇</span><p>Tu bolsa está vacía</p></div>';return;}
+  el.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div class="ci-img"><img src="${i.img}" alt="${i.name}"></div>
+      <div>
+        <div class="ci-cat">${i.gender} · ${i.subcat}</div>
+        <div class="ci-name">${i.name}</div>
+        <div class="ci-row">
+          <span class="ci-price">${'$'+(i.price*i.qty).toLocaleString('es-CO')}</span>
+          <div class="ci-qty">
+            <button class="ciq-btn" onclick="cartQty('${i.key}',-1)">−</button>
+            <div class="ciq-num">${i.qty}</div>
+            <button class="ciq-btn" onclick="cartQty('${i.key}',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <button class="ci-remove" onclick="removeFromCart('${i.key}')">×</button>
+    </div>`).join('');
+}
+
+function openCart(){document.getElementById('cartDrawer').classList.add('open');document.getElementById('backdrop').classList.add('show');}
+function closeCart(){document.getElementById('cartDrawer').classList.remove('open');document.getElementById('backdrop').classList.remove('show');}
+
+/* ── CHECKOUT ── */
+function openCheckout(){
+  if(!cart.length)return;closeCart();
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0),ship=sub>=600000?0:12000;
+  document.getElementById('orderSummary').innerHTML=
+    cart.map(i=>`<div class="order-row"><span>${i.name} ×${i.qty}</span><span>${'$'+(i.price*i.qty).toLocaleString('es-CO')}</span></div>`).join('')+
+    `<div class="order-row"><span>Envío</span><span>${ship===0?'Gratis':'$'+ship.toLocaleString('es-CO')}</span></div>`+
+    `<div class="order-row total"><span>Total</span><span>$${(sub+ship).toLocaleString('es-CO')}</span></div>`;
+  document.getElementById('checkoutForm').style.display='';
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('checkoutOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCheckout(){document.getElementById('checkoutOverlay').classList.remove('open');document.body.style.overflow='';}
+function placeOrder(){
+  const fields=['fname','lname','email','phone','address','city','zip','card','expiry','cvv'];
+  let ok=true;
+  fields.forEach(f=>{const el=document.getElementById(f);if(!el.value.trim()){el.classList.add('error');ok=false;}else el.classList.remove('error');});
+  if(!ok)return;
+  document.getElementById('checkoutForm').style.display='none';
+  document.getElementById('successScreen').classList.add('show');
+  cart=[];updateCart();
+}
+function formatCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function formatExpiry(el){let v=el.value.replace(/\D/g,'').substring(0,4);if(v.length>=2)v=v.substring(0,2)+'/'+v.substring(2);el.value=v;}
+
+/* INIT */
+renderGrid('homeGrid', allP.filter(p=>p.rating>=4.8).slice(0,6));
+</script>
+</body>
+</html>
